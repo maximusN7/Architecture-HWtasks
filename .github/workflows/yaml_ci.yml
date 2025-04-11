@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start of the action
+        run: echo Start
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: JDK setup complete
+        run: echo JDK setup complete
+
+      - name: Grant execute permission for gradlew
+        run: |
+          chmod +x gradlew
+          echo permission for gradlew granted
+
+      - name: Assemle and build
+        run: |
+          ./gradlew build
+          echo build completed
+          
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start of the action
+        run: echo Start
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: JDK setup complete
+        run: echo JDK setup complete
+
+      - name: Grant execute permission for gradlew
+        run: |
+          chmod +x gradlew
+          echo permission for gradlew granted
+
+      - name: Run tests
+        run: |
+          ./gradlew test  
+          echo test completed
