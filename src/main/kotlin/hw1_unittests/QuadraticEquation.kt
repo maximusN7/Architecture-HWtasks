@@ -1,4 +1,4 @@
-package org.example
+package org.example.hw1_unittests
 
 import kotlin.math.abs
 import kotlin.math.sqrt
