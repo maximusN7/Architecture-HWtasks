@@ -1,4 +1,6 @@
-import org.example.QuadraticEquation
+package hw1_unittests
+
+import org.example.hw1_unittests.QuadraticEquation
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
