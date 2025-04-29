@@ -1,0 +1,18 @@
+package org.example.hw3_abstractions.command
+
+import org.example.hw3_abstractions.contract.IMovingObject
+import java.awt.Point
+
+class MoveCommand(
+    private val movingObject: IMovingObject,
+) {
+
+    fun invoke() {
+        movingObject.setLocation(
+            Point(
+                movingObject.getLocation().x + movingObject.getVelocity().first,
+                movingObject.getLocation().y + movingObject.getVelocity().second,
+            )
+        )
+    }
+}
