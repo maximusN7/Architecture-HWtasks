@@ -2,10 +2,13 @@ package hw3_abstractions.command
 
 import org.example.hw3_abstractions.Property
 import org.example.hw3_abstractions.SpaceShip
+import org.example.hw3_abstractions.adapter.MovingObjectAdapter
 import org.example.hw3_abstractions.adapter.RotatingObjectAdapter
 import org.example.hw3_abstractions.command.RotateCommand
 import org.example.hw3_abstractions.model.Angle
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
+import java.awt.Point
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
@@ -26,6 +29,31 @@ class RotateCommandTest {
 
         // Assert
         assertEquals(Angle(5, 8), rotatingObjectAdapter.getAngle())
+    }
+
+    @Test
+    fun WHEN_angular_velocity_is_90_and_initial_angle_is_90_degrees_EXPECT_new_angle_be_180_and_change_of_velocity() {
+        // Arrange
+        val spaceShip = SpaceShip().apply {
+            setProperty(Property.ANGULAR_VELOCITY, 2.toByte())
+            setProperty(Property.ANGLE, Angle(2, 8))
+            setProperty(Property.VELOCITY, 8)
+        }
+        val rotatingObjectAdapter = RotatingObjectAdapter(spaceShip)
+        val movingObjectAdapter = MovingObjectAdapter(spaceShip)
+        movingObjectAdapter.setLocation(Point(0, 0))
+
+        val initialVelocity = movingObjectAdapter.getVelocity()
+
+        // Act
+        RotateCommand(rotatingObjectAdapter).invoke()
+
+        // Assert
+        assertEquals(Angle(4, 8), rotatingObjectAdapter.getAngle())
+        val newVelocity = movingObjectAdapter.getVelocity()
+        assertEquals(Pair(0, 8), initialVelocity)
+        assertEquals(Pair(-8, 0), newVelocity)
+        assertNotEquals(initialVelocity, newVelocity)
     }
 
     @Test
