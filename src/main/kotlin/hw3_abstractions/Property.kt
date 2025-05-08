@@ -5,4 +5,6 @@ enum class Property {
     VELOCITY,
     ANGLE,
     ANGULAR_VELOCITY,
+    FUEL_CONSUMPTION,
+    FUEL,
 }
