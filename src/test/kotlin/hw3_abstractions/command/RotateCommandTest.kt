@@ -78,7 +78,7 @@ class RotateCommandTest {
     fun WHEN_angular_velocity_is_not_set_EXPECT_get_exception() {
         // Arrange
         val spaceShip = SpaceShip().apply {
-            setProperty(Property.ANGULAR_VELOCITY, 2.toByte())
+            setProperty(Property.ANGLE, Angle(2, 8))
         }
         val rotatingObjectAdapter = RotatingObjectAdapter(spaceShip)
 

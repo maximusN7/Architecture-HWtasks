@@ -6,5 +6,5 @@ interface IScope {
 
     var store: MutableMap<String, ILambda>
 
-    fun resolve(key: String, params: List<Any?>? = null): Any?
+    fun <T> resolve(key: String?, params: List<Any?>? = null): T?
 }

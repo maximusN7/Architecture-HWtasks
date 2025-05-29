@@ -26,7 +26,7 @@ class IoCTest {
 
         assertEquals(1, scope.resolve("a"))
         assertEquals(2, scope.resolve("b"))
-        assertThrows<ResolveDependencyException> { scope.resolve("c") }
+        assertThrows<ResolveDependencyException> { scope.resolve<Unit>("c") }
     }
 
     @Test
@@ -56,7 +56,7 @@ class IoCTest {
         InitScopeBasedIoCCommand().invoke()
         val scope = IoC.resolve("Scopes.New") as IScope
 
-        assertThrows<ResolveDependencyException> { scope.resolve("MISSING") }
+        assertThrows<ResolveDependencyException> { scope.resolve<Unit>("MISSING") }
     }
 
     @Test

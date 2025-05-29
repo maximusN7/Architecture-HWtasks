@@ -18,12 +18,14 @@ object IoC {
         }
     }
 
-    fun resolve(key: String, params: List<Any?>? = null): Any? {
+    fun resolve(key: String?, params: List<Any?>? = null): Any? {
+        key ?: throw IllegalArgumentException("key is null")
+
         return strategy(key, params)
     }
 
     // syntactic sugar
-    fun resolve(key: String, param: Any?): Any? {
+    fun resolve(key: String?, param: Any?): Any? {
         return resolve(key, listOf(param))
     }
 

@@ -29,4 +29,6 @@ class MovingObjectAdapter(
             (velocity * sin(angle.getAngleRadians())).toInt(),
         )
     }
+
+    override fun finish() {}
 }
