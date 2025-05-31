@@ -16,6 +16,8 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
+    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.0")
+    implementation(kotlin("reflect"))
 }
 
 tasks.test {

@@ -8,11 +8,13 @@ import org.example.hw5_ioc.ioc.Scope
 import org.example.hw5_ioc.utils.ILambda
 import org.example.hw5_ioc.utils.ResolveDependencyException
 
-class InitScopeBasedIoCCommand : ICommand {
+class InitScopeBasedIoCCommand(
+    private val defaultMissingStrategy: ILambda = ILambda { _, _ -> }
+) : ICommand {
 
     override fun invoke() {
         val store: MutableMap<String, ILambda> = mutableMapOf()
-        val scope = Scope(store) { _, _ -> }
+        val scope = Scope(store, defaultMissingStrategy)
 
         store["Scopes.Root"] = ILambda { _, _ ->
             ScopeBasedResolveDependencyStrategy.root

@@ -9,7 +9,9 @@ class Scope(
 
     override var store: MutableMap<String, ILambda> = initialStore
 
-    override fun resolve(key: String, params: List<Any?>?): Any? {
-        return store[key]?.invoke(key, params) ?: strategyIfMissing(key, params)
+    override fun <T> resolve(key: String?, params: List<Any?>?): T {
+        key ?: throw IllegalArgumentException("key is null")
+
+        return store[key]?.invoke(key, params) as? T ?: strategyIfMissing(key, params) as T
     }
 }
