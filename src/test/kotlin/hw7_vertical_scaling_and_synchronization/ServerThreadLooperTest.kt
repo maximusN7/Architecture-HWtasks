@@ -33,6 +33,7 @@ class ServerThreadLooperTest {
         @JvmStatic
         @BeforeAll
         fun setupIoC() {
+            IoC.clear()
             InitScopeBasedIoCCommand(
                 defaultMissingStrategy = { _, _ -> throw AdapterFactoryNotExistingException() }
             ).invoke()
