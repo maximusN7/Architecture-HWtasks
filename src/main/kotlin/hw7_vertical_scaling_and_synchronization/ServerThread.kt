@@ -37,7 +37,9 @@ class ServerThread(
     }
 
     fun stop() {
+        check(thread?.id == Thread.currentThread().id)
         stop = true
+        behaviour = {}
     }
 
     fun updateBehaviour(newBehaviour: () -> Unit) {
