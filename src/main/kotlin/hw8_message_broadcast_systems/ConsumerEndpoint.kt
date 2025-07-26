@@ -2,6 +2,7 @@ package org.example.hw8_message_broadcast_systems
 
 import hw7_vertical_scaling_and_synchronization.ServerThread
 import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.example.hw10_microservice_architecture.validateUsersAccess
 import org.example.hw2_exceptionhandler.contract.ICommand
 import org.example.hw5_ioc.ioc.IScope
 import org.example.hw5_ioc.ioc.IoC
@@ -49,7 +50,9 @@ object ConsumerEndpoint {
                 for (record in records) {
                     val message = record.value().toString().parseToMessage()
 
-                    commandQueue.add(InterpretCommand(message, baseScope, gameServers))
+                    if (validateUsersAccess(message)) {
+                        commandQueue.add(InterpretCommand(message, baseScope, gameServers))
+                    }
                 }
             } catch (e: Exception) {
                 (IoC.resolve("ExceptionHandler", listOf(null, e)) as ICommand?)?.invoke()
