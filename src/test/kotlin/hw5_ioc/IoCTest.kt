@@ -3,17 +3,34 @@ package hw5_ioc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.example.hw3_abstractions.UObject
 import org.example.hw5_ioc.ioc.IScope
 import org.example.hw5_ioc.ioc.IoC
 import org.example.hw5_ioc.ioc.Scope
 import org.example.hw5_ioc.ioc.command.InitScopeBasedIoCCommand
 import org.example.hw5_ioc.utils.ILambda
 import org.example.hw5_ioc.utils.ResolveDependencyException
+import org.example.hw6_adapter_and_bridge.ioc.generating.CreateInterfaceAdapterStrategy
+import org.example.hw6_adapter_and_bridge.ioc.generating.utils.AdapterFactoryNotExistingException
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import kotlin.reflect.KClass
 import kotlin.test.assertEquals
 
 class IoCTest {
+
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setupIoC() {
+            IoC.clear()
+            InitScopeBasedIoCCommand(
+                defaultMissingStrategy = { _, _ -> }
+            ).invoke()
+        }
+    }
 
     // region IoC
     @Test
