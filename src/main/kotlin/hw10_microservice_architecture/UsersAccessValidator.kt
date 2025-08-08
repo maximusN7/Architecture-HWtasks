@@ -20,7 +20,6 @@ fun validateUsersAccess(message: Message): Boolean {
 
             return gameId == tokenGameId.toLong()
         } catch (e: Exception) {
-            println("AAAAAQ error = $e")
             return false
         }
     }
