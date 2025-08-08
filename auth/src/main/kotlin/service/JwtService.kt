@@ -12,12 +12,13 @@ class JwtService {
 
     private val privateKey: PrivateKey = loadPrivateKey()
 
-    fun generateToken(gameId: Long): String {
+    fun generateToken(username: String, gameId: Long): String {
         val now = Date()
         val expiryDate = Date(now.time + EXPIRATION_TIME)
 
         return Jwts.builder()
             .setSubject(gameId.toString())
+            .claim("username", username)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
             .signWith(privateKey, SignatureAlgorithm.RS256)

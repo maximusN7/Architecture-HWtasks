@@ -13,9 +13,10 @@ object CommandsList {
         2L to "RotateCommand.Get",
         3L to "HardStopCommand.Get",
         4L to "SoftStopCommand.Get",
+        5L to "ShootCommand.Get",
     )
 
-    fun getCommandById(id: Long, uObject: UObject, thread: ServerThread, args: Map<String, String?>): ICommand {
+    fun getCommandById(id: Long, uObject: UObject?, thread: ServerThread, args: Map<String, String?>): ICommand {
         val command = commands[id] ?: return EmptyCommand()
 
         return IoC.resolve(command, listOf(uObject, thread, args)) as ICommand

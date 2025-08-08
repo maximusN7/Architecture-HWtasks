@@ -1,9 +1,9 @@
 package org.example.hw8_message_broadcast_systems
 
-import org.example.hw3_abstractions.Property
 import org.example.hw5_ioc.ioc.IScope
 import org.example.hw5_ioc.ioc.IoC
 import org.example.hw8_message_broadcast_systems.commands.GameCommand
+import org.jetbrains.annotations.TestOnly
 
 object GameScheduler {
 
@@ -34,5 +34,15 @@ object GameScheduler {
         } else {
             game
         }
+    }
+
+    @TestOnly
+    fun getGameById(gameId: Long): GameCommand? {
+        return gamesMap[gameId]
+    }
+
+    @TestOnly
+    fun clearGames() {
+        gamesMap.clear()
     }
 }

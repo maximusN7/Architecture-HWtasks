@@ -3,6 +3,8 @@ package org.example.hw8_message_broadcast_systems.setup
 import hw7_vertical_scaling_and_synchronization.ServerThread
 import hw7_vertical_scaling_and_synchronization.commands.HardStopCommand
 import hw7_vertical_scaling_and_synchronization.commands.SoftStopCommand
+import org.example.hw13_interpreter_pattern.IShootingObject
+import org.example.hw13_interpreter_pattern.ShootCommand
 import org.example.hw2_exceptionhandler.ExceptionHandler
 import org.example.hw2_exceptionhandler.contract.ICommand
 import org.example.hw3_abstractions.Property
@@ -121,6 +123,20 @@ object InitEndpointIoC {
                     val args = params?.get(2)
 
                     SoftStopCommand(params?.get(1) as ServerThread)
+                }
+            )
+        )
+
+        IoC.resolve(
+            "IoC.Register",
+            listOf(
+                "ShootCommand.Get",
+                ILambda { _, params ->
+                    val uObject = params?.get(0) as UObject
+
+                    val adapter = IoC.resolve("Adapter", listOf(IShootingObject::class, uObject))
+
+                    ShootCommand(adapter as IShootingObject)
                 }
             )
         )

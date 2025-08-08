@@ -29,7 +29,7 @@ class GameController(
 
         return if (success) {
             if (gameService.isUserParticipantOfGame(request.username, request.gameId)) {
-                val token = jwtService.generateToken(request.gameId)
+                val token = jwtService.generateToken(request.username, request.gameId)
                 ResponseEntity.ok(mapOf("token" to token))
             } else {
                 ResponseEntity.status(401).body("This game is not for you")
