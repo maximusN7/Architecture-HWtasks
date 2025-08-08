@@ -7,4 +7,5 @@ enum class Property(val methodName: String) {
     ANGULAR_VELOCITY("AngularVelocity"),
     FUEL_CONSUMPTION("FuelConsumption"),
     FUEL("Fuel"),
+    COLLISION_STATE("IsCollided"),
 }
