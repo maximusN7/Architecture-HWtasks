@@ -8,8 +8,8 @@ import kotlinx.serialization.json.long
 
 @Serializable
 data class Message(
-    val gameId: Long,
-    val gameObjectId: Long,
+    val gameId: Long?,
+    val gameObjectId: Long?,
     val operationId: Long,
     val args: Map<String, String?>,
 ) {
@@ -18,8 +18,8 @@ data class Message(
 
         fun String.parseToMessage(): Message {
             val jsonObj = Json.parseToJsonElement(this).jsonObject
-            val gameId = jsonObj[idsListKeys[0]]?.jsonPrimitive?.long ?: error("Missing 'gameId' field")
-            val gameObjectId = jsonObj[idsListKeys[1]]?.jsonPrimitive?.long ?: error("Missing 'gameObjectId' field")
+            val gameId = jsonObj[idsListKeys[0]]?.jsonPrimitive?.long
+            val gameObjectId = jsonObj[idsListKeys[1]]?.jsonPrimitive?.long
             val operationId = jsonObj[idsListKeys[2]]?.jsonPrimitive?.long ?: error("Missing 'operationId' field")
             val args = jsonObj.filterKeys { !idsListKeys.contains(it) }.mapValues { it.value.jsonPrimitive.content }
 

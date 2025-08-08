@@ -11,18 +11,42 @@ fun validateUsersAccess(message: Message): Boolean {
 
     if (token != null) {
         try {
-            val tokenGameId = Jwts.parserBuilder()
+            val claims = Jwts.parserBuilder()
                 .setSigningKey(publicKey)
                 .build()
                 .parseClaimsJws(token)
                 .body
-                .subject
+            val tokenGameId = claims.subject
 
-            return gameId == tokenGameId.toLong()
+            return gameId == tokenGameId?.toLong()
         } catch (e: Exception) {
             return false
         }
     }
 
     return true
+}
+
+object UsersAccessValidator {
+
+    fun getUsername(message: Message): String? {
+        val token = message.args["token"]
+
+        if (token != null) {
+            try {
+                val claims = Jwts.parserBuilder()
+                    .setSigningKey(publicKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .body
+                val tokenUsername = claims["username"] as String?
+
+                return tokenUsername
+            } catch (e: Exception) {
+                return null
+            }
+        }
+
+        return null
+    }
 }
