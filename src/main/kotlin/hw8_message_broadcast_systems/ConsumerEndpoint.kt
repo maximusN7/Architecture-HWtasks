@@ -3,10 +3,10 @@ package org.example.hw8_message_broadcast_systems
 import hw7_vertical_scaling_and_synchronization.ServerThread
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.example.hw10_microservice_architecture.validateUsersAccess
+import org.example.hw13_interpreter_pattern.InterpreterCommand
 import org.example.hw2_exceptionhandler.contract.ICommand
 import org.example.hw5_ioc.ioc.IScope
 import org.example.hw5_ioc.ioc.IoC
-import org.example.hw8_message_broadcast_systems.commands.InterpretCommand
 import org.example.hw8_message_broadcast_systems.model.Message.Companion.parseToMessage
 import org.example.hw8_message_broadcast_systems.setup.commandsConsumerProps
 import org.example.hw8_message_broadcast_systems.setup.commandsConsumerTopics
@@ -51,7 +51,7 @@ object ConsumerEndpoint {
                     val message = record.value().toString().parseToMessage()
 
                     if (validateUsersAccess(message)) {
-                        commandQueue.add(InterpretCommand(message, baseScope, gameServers))
+                        commandQueue.add(InterpreterCommand(message, baseScope, gameServers, consumerServer))
                     }
                 }
             } catch (e: Exception) {
