@@ -61,7 +61,60 @@ jobs:
           chmod +x gradlew
           echo permission for gradlew granted
 
-      - name: Run tests
+      - name: Run tests with coverage
         run: |
-          ./gradlew test  
-          echo test completed
+          ./gradlew :agent:test  
+          ./gradlew :agent:jacocoTestReport  
+           echo agent coverage completed
+          ./gradlew :gateway:test  
+          ./gradlew :gateway:jacocoTestReport  
+           echo gateway coverage completed
+          ./gradlew :auth:test  
+          ./gradlew :auth:jacocoTestReport  
+           echo auth coverage completed
+          ./gradlew :game-server:test  
+          ./gradlew :game-server:jacocoTestReport  
+           echo game-server coverage completed
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: |
+            agent/build/reports/jacoco/test/html
+            gateway/build/reports/jacoco/test/html
+            auth/build/reports/jacoco/test/html
+            game-server/build/reports/jacoco/test/html
+
+      - name: Install xmllint
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+
+      - name: Coverage per module
+        run: |
+          AGENT_REPORT="agent/build/reports/jacoco/test/jacocoTestReport.xml"
+          AGENT_COVERED=$(xmllint --xpath "string(//report/counter[@type='INSTRUCTION']/@covered)" $AGENT_REPORT)
+          AGENT_MISSED=$(xmllint --xpath "string(//report/counter[@type='INSTRUCTION']/@missed)" $AGENT_REPORT)
+          AGENT_TOTAL=$((AGENT_COVERED + AGENT_MISSED))
+          AGENT_PERCENT=$((100 * AGENT_COVERED / AGENT_TOTAL))
+          echo "Module agent coverage ${AGENT_PERCENT}%"
+          
+          AUTH_REPORT="auth/build/reports/jacoco/test/jacocoTestReport.xml"
+          AUTH_COVERED=$(xmllint --xpath "string(//report/counter[@type='INSTRUCTION']/@covered)" $AUTH_REPORT)
+          UTH_MISSED=$(xmllint --xpath "string(//report/counter[@type='INSTRUCTION']/@missed)" $AUTH_REPORT)
+          AUTH_TOTAL=$((AUTH_COVERED + AUTH_MISSED))
+          AUTH_PERCENT=$((100 * AUTH_COVERED / AUTH_TOTAL))
+          echo "Module auth coverage ${AUTH_PERCENT}%"
+          
+          GAME_REPORT="game-server/build/reports/jacoco/test/jacocoTestReport.xml"
+          GAME_COVERED=$(xmllint --xpath "string(//report/counter[@type='INSTRUCTION']/@covered)" $GAME_REPORT)
+          GAME_MISSED=$(xmllint --xpath "string(//report/counter[@type='INSTRUCTION']/@missed)" $GAME_REPORT)
+          GAME_TOTAL=$((GAME_COVERED + GAME_MISSED))
+          GAME_PERCENT=$((100 * GAME_COVERED / GAME_TOTAL))
+          echo "Module game coverage ${GAME_PERCENT}%"
+          
+          GATEWAY_REPORT="gateway/build/reports/jacoco/test/jacocoTestReport.xml"
+          GATEWAY_COVERED=$(xmllint --xpath "string(//report/counter[@type='INSTRUCTION']/@covered)" $GATEWAY_REPORT)
+          GATEWAY_MISSED=$(xmllint --xpath "string(//report/counter[@type='INSTRUCTION']/@missed)" $GATEWAY_REPORT)
+          GATEWAY_TOTAL=$((GATEWAY_COVERED + GATEWAY_MISSED))
+          GATEWAY_PERCENT=$((100 * GATEWAY_COVERED / GATEWAY_TOTAL))
+          echo "Module gateway coverage ${GATEWAY_PERCENT}%"

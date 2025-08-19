@@ -11,10 +11,24 @@ class AuthService(
     private val passwordEncoder: PasswordEncoder,
 ) {
 
-    fun register(username: String, password: String): User {
+    /**
+     * Check if user exists, then login else register
+     */
+    fun signIn(username: String, password: String): Pair<User, Boolean?> {
         val hashed = passwordEncoder.encode(password)
-        val user = User(username = username, password = hashed)
-        return userRepository.save(user)
+
+        val existingUser = userRepository.findByUsername(username)
+        return if (existingUser != null) {
+            if (login(username, password)) {
+                Pair(existingUser, false)
+            } else {
+                Pair(existingUser, null)
+            }
+        } else {
+            val newUser = User(username = username, password = hashed)
+            userRepository.save(newUser)
+            Pair(newUser, true)
+        }
     }
 
     fun login(username: String, password: String): Boolean {

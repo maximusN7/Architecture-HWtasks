@@ -11,17 +11,19 @@ class GameService(
     private val userRepository: UserRepository,
 ) {
 
-    fun registerGame(gameName: String, participants: List<String>): Long {
-        participants.filter { username ->
+    fun registerGame(gameName: String, participants: List<String>): Game? {
+        val existingUsers = participants.filter { username ->
             userRepository.findByUsername(username) != null
         }
 
+        if (existingUsers.isEmpty()) return null
+
         val game = Game(
             gameName = gameName,
-            participantsNames = participants,
+            participantsNames = existingUsers,
         )
 
-        return gameRepository.save(game).gameId
+        return gameRepository.save(game)
     }
 
     fun isUserParticipantOfGame(username: String, gameId: Long): Boolean {
