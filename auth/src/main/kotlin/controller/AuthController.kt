@@ -14,11 +14,20 @@ class AuthController(
     private val jwtService: JwtService,
 ) {
 
-    @RequestMapping("/register")
+    @RequestMapping("/signin")
     fun register(@RequestBody request: AuthRequest): ResponseEntity<Any> {
-        val user = authService.register(request.username, request.password)
+        val (user, isRegistration) = authService.signIn(request.username, request.password)
 
-        return ResponseEntity.ok("Registered user: ${user.username}")
+        return if (isRegistration != null) {
+            ResponseEntity.ok(
+                mapOf(
+                    "username" to user.username,
+                    "isNewUser" to isRegistration
+                )
+            )
+        } else {
+            ResponseEntity.status(403).body("Wrong password")
+        }
     }
 
     @RequestMapping("/login")

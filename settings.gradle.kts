@@ -3,3 +3,6 @@ plugins {
 }
 rootProject.name = "Architecture-HWtasks"
 include("auth")
+include("agent")
+include("gateway")
+include("game-server")

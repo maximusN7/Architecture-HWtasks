@@ -33,7 +33,8 @@ class SecurityConfig(
             }
             authorizeHttpRequests {
                 authorize("/auth/**", permitAll)
-                authorize("/api/games/**", permitAll)
+                authorize("/games/**", permitAll)
+                authorize("/api/**", permitAll)
                 authorize(anyRequest, authenticated)
             }
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/games")
+@RequestMapping("/games")
 class GameController(
     private val gameService: GameService,
     private val authService: AuthService,
@@ -17,14 +17,26 @@ class GameController(
 ) {
 
     @RequestMapping("/register")
-    fun registerGame(@RequestBody request: GameRequest): String {
-        val gameId = gameService.registerGame(request.gameName, request.participantsNames)
+    fun registerGame(@RequestBody request: GameRequest): ResponseEntity<Any> {
+        val game = gameService.registerGame(request.gameName, request.participantsNames)
 
-        return "Game ${request.gameName} created. Game Id: $gameId"
+        return if (game != null) {
+            ResponseEntity.ok(
+                """
+                {
+                    "gameId": "${game.gameId}",
+                    "gameName": "${request.gameName}",
+                    "participantsNames": ${game.participantsNames.convertToJsonStyle()}
+                }
+            """.trimIndent()
+            )
+        } else {
+            ResponseEntity.status(401).body("All participants are not existing")
+        }
     }
 
     @RequestMapping("/join")
-    fun login(@RequestBody request: GameJoinRequest): ResponseEntity<Any> {
+    fun joinGame(@RequestBody request: GameJoinRequest): ResponseEntity<Any> {
         val success = authService.login(request.username, request.password)
 
         return if (success) {
@@ -37,6 +49,19 @@ class GameController(
         } else {
             ResponseEntity.status(401).body("Invalid credentials or unknown game Id")
         }
+    }
+
+    private fun List<String>.convertToJsonStyle(): String {
+        val namesString = StringBuilder().append("[")
+        this.forEachIndexed { index, name ->
+            if (index != this.lastIndex) {
+                namesString.append("\"$name\", ")
+            } else {
+                namesString.append("\"$name\"")
+            }
+        }
+        namesString.append("]")
+        return namesString.toString()
     }
 }
 

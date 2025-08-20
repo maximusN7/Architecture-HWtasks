@@ -8,7 +8,7 @@ data class Game(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val gameId: Long = 0,
-    @Column(unique = true)
+    @Column(name = "game_name")
     val gameName: String,
     @ElementCollection
     @CollectionTable(
