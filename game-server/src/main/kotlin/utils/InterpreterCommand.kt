@@ -22,20 +22,15 @@ class InterpreterCommand(
         if (message.gameId != null) {
             val game = IoC.resolve("GameCommand.Get", listOf(message.gameId, baseScope)) as GameCommand
             val userName = UsersAccessValidator.getUsername(message)
-            println("AAAAOBJECT game = $game")
             val uObject = if (userName != null) {
                 game.switchToUserScope(userName)
                 IoC.resolve("GameObject.Get", listOf(message.gameObjectId)) as UObject
             } else {
                 null
             }
-            println("AAAAOBJECT start ${game.getObjectById(3)} as moving: ${game.getObjectById(3)?.getProperty(Property.LOCATION)} and ${game.getObjectById(3)?.getProperty(Property.VELOCITY)}")
-            println("AAAAOBJECT uObject = $uObject")
             val command = CommandsList.getCommandById(message.operationId, uObject, gameThread, message.args)
-            println("AAAAOBJECT command = $command")
             game.gameQueue.add(command)
 
-            println("AAAAOBJECT end ${game.getObjectById(3)} as moving: ${game.getObjectById(3)?.getProperty(Property.LOCATION)} and ${game.getObjectById(3)?.getProperty(Property.VELOCITY)}")
         } else {
             val command = CommandsList.getCommandById(message.operationId, null, serverThread, message.args)
 

@@ -17,7 +17,6 @@ data class Message(
     companion object {
 
         fun String.parseToMessage(): Message {
-            println("AAAAA parseToMessage parseToMessage $this")
             val jsonObj = Json.parseToJsonElement(this).jsonObject
             val gameId = jsonObj[idsListKeys[0]]?.jsonPrimitive?.long
             val gameObjectId = jsonObj[idsListKeys[1]]?.jsonPrimitive?.long
